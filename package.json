@@ -1,0 +1,28 @@
+{
+  "name": "vjeverica3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "flow": "yarn run flow",
+    "lint": "./node_modules/.bin/eslint pages components server",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "babel-preset-flow": "^6.23.0",
+    "express": "^4.15.3",
+    "flow-bin": "^0.48.0",
+    "material-ui": "^0.18.3",
+    "next": "^2.4.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "styled-components": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-react": "^7.1.0"
+  }
+}
