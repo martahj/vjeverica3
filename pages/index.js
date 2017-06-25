@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'cloudinary-react';
+// import { Image } from 'cloudinary-react';
 import Layout from '../containers/Layout';
 
 const backgroundStyle = {
