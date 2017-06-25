@@ -4,12 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "flow": "yarn run flow",
+    "flow": "flow",
     "lint": "./node_modules/.bin/eslint pages components server",
     "dev": "node server.js"
   },
   "dependencies": {
+    "babel-eslint": "^7.2.3",
     "babel-preset-flow": "^6.23.0",
+    "eslint-plugin-flowtype": "^2.34.0",
     "express": "^4.15.3",
     "flow-bin": "^0.48.0",
     "material-ui": "^0.18.3",
