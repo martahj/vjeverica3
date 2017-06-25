@@ -11,9 +11,9 @@ app.prepare()
 
   server.get('*', (req, res) => handle(req, res));
 
-  server.listen(3000, (err) => {
+  server.listen(7654, (err) => {
     if (err) throw err;
-    console.log('> Ready on http://localhost:3000');
+    console.log('> Ready on http://localhost:7654');
   });
 })
 .catch((ex) => {

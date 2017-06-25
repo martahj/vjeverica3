@@ -1,0 +1,54 @@
+Pages
+- Home page (static + events - upcoming (2?) calendar plus any featured special events)
+- Bio page (dynamic content)
+- CD Buying
+  - for each CD
+    * description (WYSIGYG)
+    * title
+    * subtitle
+    * main image
+    * paypal click to buy (or "SOLD OUT")
+    * audio
+- Testimonial page - youtube vids
+- Performance schedule (calendar)
+- Accordion Lessons
+  * Contact form
+  * paypal
+- Contact page
+  * Contact form
+  * email, phone number
+- Special events - dropdown showing each page, with 'Past Events' appearing as a dropdown item
+  - Title
+  - Dates
+  - Location
+  - Map
+  - Main photo
+  - Desc where you can edit
+  - Paypal
+- FAQ with policies
+
+Calendar Events
+- Start Date
+- End date
+- Title
+- Desc (text only)
+- Link
+- Location (map?)
+- Potentially copy to calendar
+- Recurring
+
+Special Events
+- featured (boolean)
+- Title
+- Start Date
+- End date
+- Location
+- Main photo
+- Desc
+- Any paypal info
+
+Need:
+- WYSIWYG with images, standard formatting stuff (italicize, bold, colors, underline), links (both internal + external)
+- Being able to upload tracks
+- Being able to upload images
+- Be able to reference videos
