@@ -7,22 +7,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Navigation from '../components/Navigation';
 
-const appStyle = {
-  backgroundColor: 'rgba(209, 142, 10, .5)',
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  // '@font-face': {
-  //   fontFamily: 'Bitstream Vera Serif Bold',
-  //   src: "url('https://mdn.mozillademos.org/files/2468/VeraSeBd.ttf')",
-  // },
-};
-
-const cloudinaryContextStyle = {
-  // width: '100%',
-  // height: '100%',
-};
+// const redColor = '209, 66, 10';
+const yellowColor = '209, 142, 10';
+const blueColor = '12, 50, 112';
+const lighterYellowColor = '232, 214, 176';
 
 const backgroundStyle = {
   backgroundImage: 'url(/static/nature-field-flowers-yellow.jpg)',
@@ -35,8 +23,7 @@ const backgroundStyle = {
 };
 
 const contentBoxStyle = {
-  // backgroundImage: 'radial-gradient(rgba(209, 66, 10, .9) 0%, rgba(209, 66, 10, .8) 50%, rgba(209, 142, 10, .5) 100%)',
-  backgroundImage: 'radial-gradient(rgba(209, 142, 10, .4) 0%, rgba(209, 142, 10, .2) 50%, rgba(209, 142, 10, .05) 100%)',
+  backgroundImage: `radial-gradient(rgba(${yellowColor}, .4) 0%, rgba(${yellowColor}, .2) 50%, rgba(${yellowColor}, .05) 100%)`,
   width: '100%',
   height: '100%',
   display: 'flex',
@@ -51,29 +38,30 @@ const headerHolderStyle = {
 
 const headerStyle = {
   fontFamily: "'Spectral', serif",
-  color: 'rgb(12, 50, 112)',
-  // width: '100%',
+  color: `rgb(${blueColor})`,
 };
 
 const muiTheme = getMuiTheme({
   fontFamily: "'Spectral', serif",
   palette: {
-    textColor: 'rgb(12, 50, 112)',
+    textColor: `rgb(${blueColor})`,
   },
 });
 
 const childBoxStyle = {
   display: 'flex',
   flexDirection: 'row',
-  backgroundColor: 'rgba(239, 229, 208, .8)',
-  // backgroundColor: 'rgba(209, 142, 10, .4)',
-  border: '1px solid rgba(239, 229, 208, .5)',
+  justifyContent: 'flex-start',
+  flexWrap: 'wrap',
+  textAlign: 'left',
+  backgroundColor: `rgba(${lighterYellowColor}, .8)`,
   marginLeft: '5%',
   marginRight: '5%',
   marginBottom: 20,
   marginTop: 20,
   padding: '5%',
   color: 'rgb(12, 50, 112)',
+  fontFamily: "'Spectral', serif",
 };
 
 const Layout = props => (
@@ -82,7 +70,7 @@ const Layout = props => (
       <link href="https://fonts.googleapis.com/css?family=Spectral" rel="stylesheet" />
     </Head>
     <MuiThemeProvider muiTheme={muiTheme}>
-      <CloudinaryContext cloudName="dfts7qlgf" style={cloudinaryContextStyle}>
+      <CloudinaryContext cloudName="dfts7qlgf">
         <div style={backgroundStyle}>
           <div style={contentBoxStyle}>
             <div style={headerHolderStyle}>

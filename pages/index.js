@@ -2,12 +2,12 @@ import React from 'react';
 // import { Image } from 'cloudinary-react';
 import Layout from '../containers/Layout';
 
-const backgroundStyle = {
-  backgroundImage: 'url(/static/cdcover1.jpg)',
-  backgroundSize: 'cover',
-  height: '100%',
-  width: '100%',
-};
+// const backgroundStyle = {
+//   backgroundImage: 'url(/static/cdcover1.jpg)',
+//   backgroundSize: 'cover',
+//   height: '100%',
+//   width: '100%',
+// };
 
 const imageStyle = {
   height: 500,

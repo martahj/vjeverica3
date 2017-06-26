@@ -1,9 +1,16 @@
 import React from 'react';
 import Layout from '../containers/Layout';
+import cds from '../data/cds';
+import CdDisplay from '../components/CdDisplay';
 
 const Cds = () => (
   <Layout>
-    <div>i am Cds</div>
+    {cds.map(cd => (
+      <CdDisplay
+        key={cd.title}
+        cd={cd}
+      />
+    ))}
   </Layout>
 );
 
