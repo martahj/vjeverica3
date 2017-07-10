@@ -1,9 +1,10 @@
 import React from 'react';
 import Layout from '../containers/Layout';
+import Calendar from '../components/Calendar';
 
 const Performances = () => (
   <Layout>
-    <div>i am Performances</div>
+    <Calendar />
   </Layout>
 );
 

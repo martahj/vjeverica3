@@ -7,7 +7,7 @@ import leapYear from 'leap-year';
 import {
   monthsList,
   numberOfDaysInMonth,
-} from 'util/dateCheatSheet';
+} from '../../lib/dateCheatSheet';
 import type { NumberField, NumberFieldWithValidation } from './types';
 
 type DatePickerProps = {
@@ -40,7 +40,7 @@ class DatePicker extends PureComponent {
       currentYear - 1,
       currentYear,
       currentYear + 1,
-      currentYear + 2
+      currentYear + 2,
     ];
     this.state = {
       daysInMonth,
@@ -50,7 +50,7 @@ class DatePicker extends PureComponent {
   }
 
   componentWillReceiveProps(nextprops: DatePickerProps): void {
-    debugger
+    debugger;
     const stateToUpdate = {};
     const monthChanged = this.props.month.value !== nextprops.month.value;
     const yearChanged = this.props.year.value !== nextprops.year.value;
@@ -86,7 +86,7 @@ class DatePicker extends PureComponent {
     this.props.updateMonth(month);
   }
 
-  handleDateChange = (event: Event, index: number, date: number):void => {
+  handleDateChange = (event: Event, index: number, date: number): void => {
     console.log('in date change with date', date);
     this.props.updateDate(date);
   }
@@ -107,7 +107,7 @@ class DatePicker extends PureComponent {
       <div>
         <TimePicker
           format="ampm"
-          hintText='Event Time'
+          hintText="Event Time"
           onChange={this.handleChangeTime}
           value={displayTimeDate}
         />
@@ -115,9 +115,9 @@ class DatePicker extends PureComponent {
           value={date.value}
           onChange={this.handleDateChange}
           errorText={date.error}
-          hintText='Date'
-          floatingLabelText='Date'
-          >
+          hintText="Date"
+          floatingLabelText="Date"
+        >
           {Array(daysInMonth).fill('').map((placeholder, idx) => (
             <MenuItem
               key={`Day_Menu_Item_${idx}`}
@@ -129,9 +129,9 @@ class DatePicker extends PureComponent {
         <SelectField
           value={month.value}
           onChange={this.handleMonthChange}
-          hintText='Month'
-          floatingLabelText='Month'
-          >
+          hintText="Month"
+          floatingLabelText="Month"
+        >
           {monthsList.map((monthName, idx) => (
             <MenuItem
               key={`Month_Menu_Item_${idx}`}
@@ -143,15 +143,15 @@ class DatePicker extends PureComponent {
         <SelectField
           value={year.value}
           onChange={this.handleYearChange}
-          hintText='Year'
-          floatingLabelText='Year'
-          >
-            {yearsToOffer.map(year => (
-              <MenuItem
-                key={`Year_Menu_Item_${year}`}
-                value={year}
-                primaryText={year}
-              />
+          hintText="Year"
+          floatingLabelText="Year"
+        >
+          {yearsToOffer.map(year => (
+            <MenuItem
+              key={`Year_Menu_Item_${year}`}
+              value={year}
+              primaryText={year}
+            />
             ))}
         </SelectField>
       </div>

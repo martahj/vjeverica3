@@ -3,7 +3,7 @@ import Layout from '../containers/Layout';
 
 const Experience = () => (
   <Layout>
-    <div>i am Experience</div>
+    <div>i am Experience.. what should go here?</div>
   </Layout>
 );
 

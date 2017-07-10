@@ -4,8 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import moment from 'moment';
 import selectn from 'selectn';
-import { Row, Col } from 'react-flexbox-grid';
-import formatDateRange from 'util/formatDateRange';
+import formatDateRange from '../lib/formatDateRange';
 
 export const titleStyles = {
   fontWeight: 600,
@@ -57,36 +56,20 @@ const EventDetailsModal = ({
       ]}
     >
       <div>
-        <Row style={sectionStyles}>
-          <Col xs={12} sm={3} style={titleStyles}>
-              Date
-          </Col>
-          <Col xs={12} sm={9}>
-            <div>
-              {dateText}
-            </div>
-          </Col>
-        </Row>
-        <Row style={sectionStyles}>
-          <Col xs={12} sm={3} style={titleStyles}>
-            Location
-          </Col>
-          <Col xs={12} sm={9}>
-            <div>
-              {location}
-            </div>
-          </Col>
-        </Row>
-        <Row style={sectionStyles}>
-          <Col xs={12}>
-            {desc}
-          </Col>
-        </Row>
-        <Row style={sectionStyles}>
-          <Col xs={12}>
-            <a href={link} target="_blank">More Information</a>
-          </Col>
-        </Row>
+        <div>
+          Date
+          {dateText}
+        </div>
+        <div>
+          Location
+          {location}
+        </div>
+        <div>
+          {desc}
+        </div>
+        <div>
+          <a href={link} target="_blank">More Information</a>
+        </div>
       </div>
     </Dialog>
   );

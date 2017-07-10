@@ -4,11 +4,10 @@ import selectn from 'selectn';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import { Row, Col } from 'react-flexbox-grid';
 import {
   parseDate,
-} from 'util/dateCheatSheet';
-import type { ErrorMessage } from 'definitions/validations';
+} from '../../lib/dateCheatSheet';
+import type { ErrorMessage } from '../../definitions/validations';
 import DatePicker from './DatePicker';
 import {
   urlValidation,
@@ -113,8 +112,8 @@ class CreateEventModal extends PureComponent {
   props: CreateEventModalProps;
   state: CreateEventModalState = initialState;
 
-  componentWillReceiveProps (nextprops) {
-    let stateToUpdate = {};
+  componentWillReceiveProps(nextprops) {
+    const stateToUpdate = {};
     if (nextprops.start !== this.props.start) {
       const { date, year, month, hours, minutes } = parseDate(nextprops.start);
       stateToUpdate.startDate = {
@@ -256,7 +255,7 @@ class CreateEventModal extends PureComponent {
           ...this.state.startDate.date,
           error: dateOfMonthValidation(date, month, year),
         },
-      }
+      },
     });
   }
 
@@ -271,7 +270,7 @@ class CreateEventModal extends PureComponent {
           ...this.state.endDate.date,
           error: dateOfMonthValidation(date, month, year),
         },
-      }
+      },
     });
   }
 
@@ -286,7 +285,7 @@ class CreateEventModal extends PureComponent {
           ...this.state.startDate.date,
           error: dateOfMonthValidation(date, month, year),
         },
-      }
+      },
     });
   }
 
@@ -301,7 +300,7 @@ class CreateEventModal extends PureComponent {
           ...this.state.endDate.date,
           error: dateOfMonthValidation(date, month, year),
         },
-      }
+      },
     });
   }
 
@@ -323,113 +322,77 @@ class CreateEventModal extends PureComponent {
     return (
       <Dialog
         open={open}
-        title='Create a New Event'
+        title="Create a New Event"
         actions={[
           <FlatButton
-            label='Cancel'
+            label="Cancel"
             primary
             onClick={handleClose}
           />,
           <FlatButton
-            label='Create'
+            label="Create"
             primary
             onClick={this.confirmCreate}
-          />
+          />,
         ]}
       >
-      <div>
-        <Row>
-          <Col xs={12} sm={3}>
-            Title
-          </Col>
-          <Col xs={12} sm={9}>
-            <TextField
-              hintText='Title'
-              floatingLabelText='Title'
-              value={title.value}
-              errorText={title.error}
-              onChange={this.handleTitleChange}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} sm={3}>
-            Link
-          </Col>
-          <Col xs={12} sm={9}>
-            <TextField
-              hintText='https://www.google.com'
-              floatingLabelText='Link URL'
-              value={url.value}
-              errorText={url.error}
-              onChange={this.handleUrlChange}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} sm={3}>
-            Event Location
-          </Col>
-          <Col xs={12} sm={9}>
-            <TextField
-              hintText='Location'
-              floatingLabelText='Location'
-              value={location.value}
-              errorText={location.error}
-              onChange={this.handleLocationChange}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} sm={3}>
-            Description
-          </Col>
-          <Col xs={12} sm={9}>
-            <TextField
-              multiLine
-              hintText='Description'
-              floatingLabelText='Description'
-              value={description.value}
-              errorText={description.error}
-              onChange={this.handleDescriptionChange}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} sm={3}>
-            Start Time
-          </Col>
-          <Col xs={12} sm={9}>
-            <DatePicker
-              updateTime={this.updateStartTime}
-              date={startDate.date}
-              month={startDate.month}
-              year={startDate.year}
-              updateDate={this.updateStartDate}
-              updateMonth={this.updateStartMonth}
-              updateYear={this.updateStartYear}
-              initialDateForDisplay={start}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} sm={3}>
-            End Time
-          </Col>
-          <Col xs={12} sm={9}>
-            <DatePicker
-              updateTime={this.updateEndTime}
-              date={endDate.date}
-              month={endDate.month}
-              year={endDate.year}
-              updateDate={this.updateEndDate}
-              updateMonth={this.updateEndMonth}
-              updateYear={this.updateEndYear}
-              initialDateForDisplay={end}
-            />
-          </Col>
-        </Row>
-      </div>
+        <div>
+          Title
+          <TextField
+            hintText="Title"
+            floatingLabelText="Title"
+            value={title.value}
+            errorText={title.error}
+            onChange={this.handleTitleChange}
+          />
+          Link
+          <TextField
+            hintText="https://www.google.com"
+            floatingLabelText="Link URL"
+            value={url.value}
+            errorText={url.error}
+            onChange={this.handleUrlChange}
+          />
+          Event Location
+          <TextField
+            hintText="Location"
+            floatingLabelText="Location"
+            value={location.value}
+            errorText={location.error}
+            onChange={this.handleLocationChange}
+          />
+          Description
+          <TextField
+            multiLine
+            hintText="Description"
+            floatingLabelText="Description"
+            value={description.value}
+            errorText={description.error}
+            onChange={this.handleDescriptionChange}
+          />
+          Start Time
+          <DatePicker
+            updateTime={this.updateStartTime}
+            date={startDate.date}
+            month={startDate.month}
+            year={startDate.year}
+            updateDate={this.updateStartDate}
+            updateMonth={this.updateStartMonth}
+            updateYear={this.updateStartYear}
+            initialDateForDisplay={start}
+          />
+          End Time
+          <DatePicker
+            updateTime={this.updateEndTime}
+            date={endDate.date}
+            month={endDate.mownth}
+            year={endDate.year}
+            updateDate={this.updateEndDate}
+            updateMonth={this.updateEndMonth}
+            updateYear={this.updateEndYear}
+            initialDateForDisplay={end}
+          />
+        </div>
       </Dialog>
     );
   }

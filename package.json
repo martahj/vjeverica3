@@ -16,9 +16,12 @@
     "eslint-plugin-flowtype": "^2.34.0",
     "express": "^4.15.3",
     "flow-bin": "^0.48.0",
+    "leap-year": "^2.0.1",
     "material-ui": "^0.18.3",
+    "moment": "^2.18.1",
     "next": "^2.4.4",
     "react": "^15.6.1",
+    "react-big-calendar": "^0.14.4",
     "react-dom": "^15.6.1",
     "selectn": "^1.1.2",
     "styled-components": "^2.1.0"
