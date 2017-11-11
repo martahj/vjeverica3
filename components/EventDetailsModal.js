@@ -27,6 +27,9 @@ type EventDetailsModalProps = {
     desc: string,
     link: string,
     location: string,
+    special: boolean,
+    featured: boolean,
+    imageUrl: ?string,
   },
 };
 

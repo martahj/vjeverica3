@@ -1,4 +1,5 @@
 import React from 'react';
+import fetch from 'isomorphic-unfetch';
 import Layout from '../containers/Layout';
 
 const Events = () => (

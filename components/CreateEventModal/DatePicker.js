@@ -3,11 +3,13 @@ import React, { PureComponent } from 'react';
 import TimePicker from 'material-ui/TimePicker';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import selectn from 'selectn';
 import leapYear from 'leap-year';
 import {
   monthsList,
   numberOfDaysInMonth,
 } from '../../lib/dateCheatSheet';
+import { dateValidation } from './validations';
 import type { NumberField, NumberFieldWithValidation } from './types';
 
 type DatePickerProps = {
@@ -18,7 +20,7 @@ type DatePickerProps = {
   date: NumberFieldWithValidation,
   month: NumberField,
   year: NumberField,
-  initialDateForDisplay: Date | null,
+  initialDateForDisplay: ?Date
 }
 
 type DatePickerState = {
@@ -27,41 +29,62 @@ type DatePickerState = {
   yearsToOffer: Array<number>,
 };
 
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  section: {
+    width: '25%',
+  }
+}
+
+const getYearsToOffer = (currentYear: number): Array<number> => [
+  currentYear - 1,
+  currentYear,
+  currentYear + 1,
+  currentYear + 2,
+];
+
 class DatePicker extends PureComponent {
   props: DatePickerProps;
   state: DatePickerState;
   constructor(props: DatePickerProps) {
     super(props);
-    const daysInMonth: number = numberOfDaysInMonth(props.month.value, leapYear(props.year.value));
-    const displayTimeDate: (Date | null) = props.initialDateForDisplay || null;
-    const currentDate: Date = new Date();
-    const currentYear: number = currentDate.getYear();
-    const yearsToOffer: Array<number> = [
-      currentYear - 1,
-      currentYear,
-      currentYear + 1,
-      currentYear + 2,
-    ];
+    const displayTimeDate = props.initialDateForDisplay || new Date();
+    const month = selectn('month.value', props);
+    const year = selectn('year.value', props);
     this.state = {
-      daysInMonth,
       displayTimeDate,
-      yearsToOffer,
+      yearsToOffer: getYearsToOffer(year),
+      daysInMonth: numberOfDaysInMonth(month, leapYear(year)),
     };
   }
 
   componentWillReceiveProps(nextprops: DatePickerProps): void {
-    debugger;
-    const stateToUpdate = {};
-    const monthChanged = this.props.month.value !== nextprops.month.value;
-    const yearChanged = this.props.year.value !== nextprops.year.value;
-    if (monthChanged || yearChanged) {
-      const daysInMonth = numberOfDaysInMonth(nextprops.month.value, leapYear(nextprops.year));
-      if (daysInMonth !== this.state.daysInMonth) stateToUpdate.daysInMonth = daysInMonth;
+    const updatedState = {};
+    const date = selectn('date.value', nextprops);
+    const month = selectn('month.value', nextprops);
+    const year = selectn('year.value', nextprops);
+    const initialDateForDisplay = selectn('initialDateForDisplay', nextprops);
+    const initialDateChanged = initialDateForDisplay !== selectn('initialDateForDisplay', this.props);
+    if (initialDateChanged) {
+      updatedState.displayTimeDate = initialDateForDisplay;
+      updatedState.yearsToOffer = getYearsToOffer(year);
     }
-    if (Object.keys(stateToUpdate).length) {
-      this.setState({
-        ...stateToUpdate,
-      });
+    const dateChanged = selectn('date.value', this.props) !== date;
+    const monthChanged = selectn('month.value', this.props) !== month;
+    const yearChanged = selectn('year.value', this.props) !== year;
+    if (monthChanged || yearChanged) {
+      updatedDaysInMonth = numberOfDaysInMonth(month, leapYear(year));
+      if (daysInMonth !== this.state.daysInMonth) updatedState.daysInMonth = updatedDaysInMonth;
+    }
+    if (updatedState.daysInMonth || dateChanged) {
+      const dateError = dateValidation(date, updatedDaysInMonth);
+      this.props.handleDateError(dateError);
+    }
+    if (Object.keys(updatedState).length) {
+      this.setState(updatedState);
     }
   }
 
@@ -83,11 +106,11 @@ class DatePicker extends PureComponent {
   }
 
   handleMonthChange = (event: Event, index: number, month: number): void => {
+    console.log('in handleMonthChange with month', month);
     this.props.updateMonth(month);
   }
 
   handleDateChange = (event: Event, index: number, date: number): void => {
-    console.log('in date change with date', date);
     this.props.updateDate(date);
   }
 
@@ -102,14 +125,15 @@ class DatePicker extends PureComponent {
       month,
       year,
     } = this.props;
-    console.log('date', date, 'month', month, 'year', year);
     return (
-      <div>
+      <div style={styles.container}>
         <TimePicker
           format="ampm"
           hintText="Event Time"
           onChange={this.handleChangeTime}
           value={displayTimeDate}
+          // style={styles.section}
+          textFieldStyle={{ width: '100%' }}
         />
         <SelectField
           value={date.value}
@@ -117,6 +141,7 @@ class DatePicker extends PureComponent {
           errorText={date.error}
           hintText="Date"
           floatingLabelText="Date"
+          style={styles.section}
         >
           {Array(daysInMonth).fill('').map((placeholder, idx) => (
             <MenuItem
@@ -131,6 +156,7 @@ class DatePicker extends PureComponent {
           onChange={this.handleMonthChange}
           hintText="Month"
           floatingLabelText="Month"
+          style={styles.section}
         >
           {monthsList.map((monthName, idx) => (
             <MenuItem
@@ -145,6 +171,7 @@ class DatePicker extends PureComponent {
           onChange={this.handleYearChange}
           hintText="Year"
           floatingLabelText="Year"
+          style={styles.section}
         >
           {yearsToOffer.map(year => (
             <MenuItem
@@ -158,5 +185,7 @@ class DatePicker extends PureComponent {
     );
   }
 }
+
+
 
 export default DatePicker;

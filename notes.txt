@@ -1,6 +1,13 @@
 Pages
 - Home page (static + events - upcoming (2?) calendar plus any featured special events)
+  - sign up for mailing list opportunity?
+  - prevent spam robots
+  - cd baby
+  - youtube vids
+  - picture carousel
+  - testimonials
 - Bio page (dynamic content)
+  - pictures
 - CD Buying
   - for each CD
     * description (WYSIGYG)
@@ -43,8 +50,9 @@ Special Events
 - Start Date
 - End date
 - Location
-- Main photo
+- Main photo - image id
 - Desc
+- Link
 - Any paypal info
 
 Need:

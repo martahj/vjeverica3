@@ -1,11 +1,20 @@
 // @flow
-import React from 'react';
+import React, { PureComponent, Children } from 'react';
 // import selectn from 'selectn';
 import Head from 'next/head';
 import { CloudinaryContext } from 'cloudinary-react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import Navigation from '../components/Navigation';
+import Auth from '../components/Auth';
+
+try {
+  injectTapEventPlugin();
+} catch (err) {
+  console.log('injectTapEventPlugin error', err);
+}
+
 
 // const redColor = '209, 66, 10';
 const yellowColor = '209, 142, 10';
@@ -64,33 +73,86 @@ const childBoxStyle = {
   fontFamily: "'Spectral', serif",
 };
 
-const Layout = props => (
-  <div>
-    <Head>
-      <link href="https://fonts.googleapis.com/css?family=Spectral" rel="stylesheet" />
-    </Head>
-    <MuiThemeProvider muiTheme={muiTheme}>
-      <CloudinaryContext cloudName="dfts7qlgf">
-        <div style={backgroundStyle}>
-          <div style={contentBoxStyle}>
-            <div style={headerHolderStyle}>
-              <h1 style={headerStyle}>Vjeverica Productions</h1>
-              <h3 style={{ ...headerStyle, marginBottom: 0 }}>
-                SHIRLEY JOHNSON
-              </h3>
-              <h3 style={{ ...headerStyle, marginTop: 0 }}>
-                Accordion and Vocals
-              </h3>
+type User = {
+  email: string,
+  admin: boolean,
+};
+
+type LayoutState = {
+  user: ?User,
+  token: ?string,
+};
+
+type LayoutProps = {
+  children: any,
+}
+
+class Layout extends PureComponent<LayoutProps, LayoutState> {
+  state = {
+    user: null,
+    token: null,
+  };
+
+  updateUser = (user: User): void => {
+    this.setState({ user });
+  }
+
+  updateToken = (token: string): void => this.setState({ token })
+
+  logOut = (): void => this.setState({ user: null, token: null })
+
+  logIn = ({ user, token }: LayoutState): void => {
+    this.updateToken(token);
+    this.updateUser(user);
+  }
+
+  render() {
+    const { user, token } = this.state;
+    const loggedIn = Boolean(user && token);
+    return (
+      <div>
+        <Head>
+          <link href="https://fonts.googleapis.com/css?family=Spectral" rel="stylesheet" />
+        </Head>
+        <MuiThemeProvider muiTheme={muiTheme}>
+          <CloudinaryContext cloudName="dfts7qlgf">
+            <div style={backgroundStyle}>
+              <div style={contentBoxStyle}>
+                <Auth
+                  loggedIn={loggedIn}
+                  logIn={this.logIn}
+                  logOut={this.logOut}
+                />
+                {loggedIn && (
+                  <div>
+                    {`You are logged in as ${user.email}`}
+                  </div>
+                )}
+                <div style={headerHolderStyle}>
+                  <h1 style={headerStyle}>Vjeverica Productions</h1>
+                  <h3 style={{ ...headerStyle, marginBottom: 0 }}>
+                    SHIRLEY JOHNSON
+                  </h3>
+                  <h3 style={{ ...headerStyle, marginTop: 0 }}>
+                    Accordion and Vocals
+                  </h3>
+                </div>
+                <Navigation />
+                <div style={childBoxStyle}>
+                  {Children.map(this.props.children, child => (
+                    React.cloneElement(child, {
+                      token,
+                      user,
+                    })
+                  ))}
+                </div>
+              </div>
             </div>
-            <Navigation />
-            <div style={childBoxStyle}>
-              {props.children}
-            </div>
-          </div>
-        </div>
-      </CloudinaryContext>
-    </MuiThemeProvider>
-  </div>
-);
+          </CloudinaryContext>
+        </MuiThemeProvider>
+      </div>
+    );
+  }
+}
 
 export default Layout;

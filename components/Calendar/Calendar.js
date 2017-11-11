@@ -1,11 +1,28 @@
+// @flow
 import React, { PureComponent } from 'react';
 import BigCalendar from 'react-big-calendar';
+import selectn from 'selectn';
 import moment from 'moment';
 import EventDetailsModal from '../EventDetailsModal';
 import CreateEventModal from '../CreateEventModal';
-import { calendarBox } from './style';
 
 BigCalendar.momentLocalizer(moment);
+
+type User = {
+  email: string,
+  admin: boolean,
+};
+
+type CalendarProps = {
+  token: ?string,
+  user: ?User,
+  events: Array<Object>,
+};
+
+const calendarBox = {
+  height: 800,
+  width: '100%',
+};
 
 // - start
 // - end
@@ -18,112 +35,7 @@ BigCalendar.momentLocalizer(moment);
 // - Potentially copy to calendar
 // - Recurring
 
-const events = [
-  {
-    title: 'All Day Event',
-    allDay: true,
-    start: new Date(2015, 3, 0),
-    end: new Date(2015, 3, 1),
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-  {
-    title: 'Long Event',
-    start: new Date(2015, 3, 7),
-    end: new Date(2015, 3, 10),
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-
-  {
-    title: 'DTS STARTS',
-    start: new Date(2016, 2, 13, 0, 0, 0),
-    end: new Date(2016, 2, 20, 0, 0, 0),
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-
-  {
-    title: 'DTS ENDS',
-    start: new Date(2016, 10, 6, 0, 0, 0),
-    end: new Date(2016, 10, 13, 0, 0, 0),
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-
-  {
-    title: 'Some Event',
-    start: new Date(2015, 3, 9, 0, 0, 0),
-    end: new Date(2015, 3, 9, 0, 0, 0),
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-  {
-    title: 'Conference',
-    start: new Date(2015, 3, 11),
-    end: new Date(2015, 3, 13),
-    desc: 'Big conference for important people',
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-  {
-    title: 'Meeting',
-    start: new Date(2015, 3, 12, 10, 30, 0, 0),
-    end: new Date(2015, 3, 12, 12, 30, 0, 0),
-    desc: 'Pre-meeting meeting, to prepare for the meeting',
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-  {
-    title: 'Lunch',
-    start: new Date(2015, 3, 12, 12, 0, 0, 0),
-    end: new Date(2015, 3, 12, 13, 0, 0, 0),
-    desc: 'Power lunch',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-  {
-    title: 'Meeting',
-    start: new Date(2015, 3, 12, 14, 0, 0, 0),
-    end: new Date(2015, 3, 12, 15, 0, 0, 0),
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-  {
-    title: 'Happy Hour',
-    start: new Date(2015, 3, 12, 17, 0, 0, 0),
-    end: new Date(2015, 3, 12, 17, 30, 0, 0),
-    desc: 'Most important meal of the day',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-  {
-    title: 'Dinner',
-    start: new Date(2015, 3, 12, 20, 0, 0, 0),
-    end: new Date(2015, 3, 12, 21, 0, 0, 0),
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-  {
-    title: 'Birthday Party',
-    start: new Date(2015, 3, 13, 7, 0, 0),
-    end: new Date(2015, 3, 13, 10, 30, 0),
-    desc: 'an all day event!',
-    link: 'http://www.google.com',
-    location: 'starbucks',
-  },
-];
-
-class Calendar extends PureComponent {
+class Calendar extends PureComponent<CalendarProps> {
   constructor(props) {
     super(props);
     this.state = {
@@ -150,7 +62,7 @@ class Calendar extends PureComponent {
   }
 
   handleDateSelect = ({ start, end }) => {
-    console.log('select start', start, 'end', end);
+    if (!selectn('user.admin', this.props)) return;
     this.setState({
       newEventStartDate: start,
       newEventEndDate: end,
@@ -163,6 +75,7 @@ class Calendar extends PureComponent {
   }
 
   render() {
+    const { token, user } = this.props;
     const {
       showEventDetails,
       selectedEvent,
@@ -178,10 +91,11 @@ class Calendar extends PureComponent {
         />
         <BigCalendar
           selectable
-          events={events}
-          defaultDate={new Date(2015, 3, 1)}
+          events={this.props.events}
+          defaultDate={new Date(2017, 8, 1)}
           onSelectEvent={this.handleSelectEvent}
           onSelecting={this.handleDateSelect}
+          // style={{ width: '100%' }}
         />
         <EventDetailsModal
           open={showEventDetails}

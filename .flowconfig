@@ -1,11 +1,13 @@
 [ignore]
 .*/node_modules/babel-plugin-transform-react-remove-prop-types/.*
 .*/node_modules/styled-components/.*
+.*/node_modules/mitt/.*
 
 [include]
 server
 pages
 
 [libs]
+./definitions
 
 [options]

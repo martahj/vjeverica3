@@ -48,7 +48,10 @@ const barStyle = {
 const Navigation = () => (
   <div style={barStyle}>
     {pages.map(page => (
-      <Link href={page.link}>
+      <Link
+        href={page.link}
+        key={`Nav_Item_${page.link}`}
+      >
         <FlatButton label={page.text} />
       </Link>
     ))}

@@ -2,6 +2,7 @@
 
 export type NumberField = {
   value: number,
+  // error: ?string,
 };
 
 export type NumberFieldWithValidation = {

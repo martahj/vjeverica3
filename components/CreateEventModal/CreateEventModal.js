@@ -4,17 +4,21 @@ import selectn from 'selectn';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import Checkbox from 'material-ui/Checkbox';
 import {
   parseDate,
 } from '../../lib/dateCheatSheet';
-import type { ErrorMessage } from '../../definitions/validations';
 import DatePicker from './DatePicker';
 import {
   urlValidation,
-  dateOfMonthValidation,
+  // dateOfMonthValidation,
   notEmptyValidation,
 } from './validations';
 import type { NumberField, NumberFieldWithValidation } from './types';
+
+/*
+ * TODO make look better on mobile
+*/
 
 type CreateEventModalProps = {
   open: boolean,
@@ -43,6 +47,10 @@ type CreateEventModalState = {
   url: InputField,
   startDate: DateField,
   endDate: DateField,
+  special: boolean,
+  featured: boolean,
+  imageUrl: ?string,
+  extendedDescription: ?string,
 };
 
 const initialState: CreateEventModalState = {
@@ -64,24 +72,24 @@ const initialState: CreateEventModalState = {
   },
   startDate: {
     date: {
-      value: 0,
+      value: 0, // TODO create error if invalid day given days in month
       error: null,
     },
     year: {
       value: 0,
-      error: null,
+      // error: null,
     },
     month: {
       value: 0,
-      error: null,
+      // error: null,
     },
     hours: {
       value: 0,
-      error: null,
+      // error: null,
     },
     minutes: {
       value: 0,
-      error: null,
+      // error: null,
     },
   },
   endDate: {
@@ -106,20 +114,42 @@ const initialState: CreateEventModalState = {
       error: null,
     },
   },
+  special: false,
+  featured: false,
+  imageUrl: null,
+  extendedDescription: null,
+};
+
+const styles = {
+  eventDetailsWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  // singleLineElementStyle: {
+  //   width: '100%',
+  //   display: 'flex',
+  //   flexDirection: 'row',
+  // },
+  // titleStyle={
+  //
+  // },
+  textfieldStyle: {
+    width: '100%',
+  },
 };
 
 class CreateEventModal extends PureComponent {
   props: CreateEventModalProps;
   state: CreateEventModalState = initialState;
 
-  componentWillReceiveProps(nextprops) {
+  componentWillReceiveProps(nextprops: CreateEventModalProps): void {
     const stateToUpdate = {};
     if (nextprops.start !== this.props.start) {
       const { date, year, month, hours, minutes } = parseDate(nextprops.start);
       stateToUpdate.startDate = {
         date: {
           value: date,
-          error: dateOfMonthValidation(date, month, year),
+          error: null,
         },
         month: { value: month },
         year: { value: year },
@@ -132,7 +162,6 @@ class CreateEventModal extends PureComponent {
       stateToUpdate.endDate = {
         date: {
           value: date,
-          error: dateOfMonthValidation(date, month, year),
         },
         month: { value: month },
         year: { value: year },
@@ -146,7 +175,7 @@ class CreateEventModal extends PureComponent {
   }
 
   confirmCreate = (): void => {
-    alert('will create event');
+    console.log('going to create an event', this.state);
     this.closeModal();
   }
 
@@ -157,6 +186,7 @@ class CreateEventModal extends PureComponent {
 
   handleTitleChange = (event: ReactSyntheticEvent): void => {
     const { value } = event.target;
+    console.log('changed value to', value);
     this.setState({
       title: {
         value,
@@ -195,28 +225,28 @@ class CreateEventModal extends PureComponent {
     });
   }
 
-  updateStartTime = (hour: number, minutes: number): void => {
+  updateStartTime = (hours: number, minutes: number): void => {
+    console.log('in update start time with hours', hours, 'minutes', minutes);
     this.setState({
       startDate: {
         ...this.state.startDate,
-        hour: { value: hour },
+        hours: { value: hours },
         minutes: { value: minutes },
       },
     });
   }
 
-  updateEndTime = (hour: number, minutes: number): void => {
+  updateEndTime = (hours: number, minutes: number): void => {
     this.setState({
       endDate: {
         ...this.state.endDate,
-        hour: { value: hour },
+        hours: { value: hours },
         minutes: { value: minutes },
       },
     });
   }
 
   updateStartDate = (date: number): void => {
-    console.log('updating start date', date);
     const year = selectn('startDate.year.value', this.state);
     const month = selectn('startDate.month.value', this.state);
     this.setState({
@@ -224,87 +254,112 @@ class CreateEventModal extends PureComponent {
         ...this.state.startDate,
         date: {
           value: date,
-          error: dateOfMonthValidation(date, month, year),
+          error: this.state.startDate.error,
         },
       },
     });
   }
 
-  updateEndDate = (date: number): void => {
-    const year = selectn('endDate.year.value', this.state);
-    const month = selectn('endDate.month.value', this.state);
+  updateEndDate = (date: number, dateError: ?string): void => {
     this.setState({
       endDate: {
         ...this.state.endDate,
         date: {
+          error: this.state.endDate.error,
           value: date,
-          error: dateOfMonthValidation(date, month, year),
+        },
+      },
+    });
+  }
+
+  updateStartDateError = (error: ?string): void => {
+    this.setState({
+      startDate: {
+        ...this.state.startDate,
+        date: {
+          value: this.state.startDate.value,
+          error,
+        },
+      },
+    });
+  }
+
+  updateEndDateError = (error: ?string): void => {
+    this.setState({
+      endDate: {
+        ...this.state.endDate,
+        date: {
+          value: this.state.startDate.value,
+          error,
         },
       },
     });
   }
 
   updateStartMonth = (month: number): void => {
-    const year = selectn('startDate.year.value', this.state);
-    const date = selectn('startDate.date.value', this.state);
     this.setState({
       startDate: {
         ...this.state.startDate,
         month: { value: month },
-        date: {
-          ...this.state.startDate.date,
-          error: dateOfMonthValidation(date, month, year),
-        },
       },
     });
   }
 
   updateEndMonth = (month: number): void => {
-    const year = selectn('endDate.year.value', this.state);
-    const date = selectn('endDate.date.value', this.state);
     this.setState({
-      startDate: {
+      endDate: {
         ...this.state.endDate,
         month: { value: month },
-        date: {
-          ...this.state.endDate.date,
-          error: dateOfMonthValidation(date, month, year),
-        },
       },
     });
   }
 
   updateStartYear = (year: number): void => {
-    const month = selectn('startDate.month.value', this.state);
-    const date = selectn('startDate.date.value', this.state);
     this.setState({
       startDate: {
         ...this.state.startDate,
         year: { value: year },
-        date: {
-          ...this.state.startDate.date,
-          error: dateOfMonthValidation(date, month, year),
-        },
       },
     });
   }
 
   updateEndYear = (year: number): void => {
-    const month = selectn('endDate.month.value', this.state);
-    const date = selectn('endDate.date.value', this.state);
     this.setState({
       startDate: {
         ...this.state.endDate,
         year: { value: year },
-        date: {
-          ...this.state.endDate.date,
-          error: dateOfMonthValidation(date, month, year),
-        },
       },
     });
   }
 
+  handleSpecialToggle = (event: Object, isInputChecked: boolean): void => {
+    this.setState({
+      special: isInputChecked,
+    });
+  }
+
+  handleFeaturedToggle = (event: Object, isInputChecked: boolean): void => {
+    this.setState({
+      featured: isInputChecked,
+    });
+  }
+
+  handleImageUrlChange = (event: ReactSyntheticEvent): void => {
+    const { value } = event.target;
+    this.setState({
+      imageUrl: value,
+    });
+  }
+
+  handleExtendedDescriptionChange = (event: ReactSyntheticEvent): void => {
+    const { value } = event.target;
+    this.setState({
+      extendedDescription: value,
+    });
+  }
+
   render() {
+    console.log('CreateEventModal props', this.props, 'state', this.state);
     const {
       open,
       start,
@@ -318,11 +373,24 @@ class CreateEventModal extends PureComponent {
       description,
       startDate,
       endDate,
+      special,
+      featured,
+      imageUrl,
+      extendedDescription,
     } = this.state;
+    const submitDisabled = Boolean(
+      title.error ||
+      location.error ||
+      url.error ||
+      description.error ||
+      startDate.date.error ||
+      endDate.date.error,
+    );
     return (
       <Dialog
         open={open}
         title="Create a New Event"
+        autoScrollBodyContent
         actions={[
           <FlatButton
             label="Cancel"
@@ -333,37 +401,38 @@ class CreateEventModal extends PureComponent {
             label="Create"
             primary
             onClick={this.confirmCreate}
+            disabled={submitDisabled}
           />,
         ]}
       >
-        <div>
-          Title
+        <div style={styles.eventDetailsWrapper}>
           <TextField
+            style={styles.textfieldStyle}
             hintText="Title"
             floatingLabelText="Title"
             value={title.value}
             errorText={title.error}
             onChange={this.handleTitleChange}
           />
-          Link
           <TextField
+            style={styles.textfieldStyle}
             hintText="https://www.google.com"
             floatingLabelText="Link URL"
             value={url.value}
             errorText={url.error}
             onChange={this.handleUrlChange}
           />
-          Event Location
           <TextField
+            style={styles.textfieldStyle}
             hintText="Location"
             floatingLabelText="Location"
             value={location.value}
             errorText={location.error}
             onChange={this.handleLocationChange}
           />
-          Description
           <TextField
             multiLine
+            style={styles.textfieldStyle}
             hintText="Description"
             floatingLabelText="Description"
             value={description.value}
@@ -380,18 +449,51 @@ class CreateEventModal extends PureComponent {
             updateMonth={this.updateStartMonth}
             updateYear={this.updateStartYear}
             initialDateForDisplay={start}
+            handleDateError={this.updateStartDateError}
           />
           End Time
           <DatePicker
             updateTime={this.updateEndTime}
             date={endDate.date}
-            month={endDate.mownth}
+            month={endDate.month}
             year={endDate.year}
             updateDate={this.updateEndDate}
             updateMonth={this.updateEndMonth}
             updateYear={this.updateEndYear}
             initialDateForDisplay={end}
+            handleDateError={this.updateEndDateError}
           />
+          <Checkbox
+            label="Special Event"
+            onCheck={this.handleSpecialToggle}
+            checked={special}
+          />
+          {special && (
+            <Checkbox
+              label="Featured"
+              onCheck={this.handleFeaturedToggle}
+              checked={featured}
+            />
+          )}
+          {special && (
+            <TextField
+              style={styles.textfieldStyle}
+              hintText="image.jpg"
+              floatingLabelText="Image URL"
+              value={imageUrl}
+              onChange={this.handleImageUrlChange}
+            />
+          )}
+          {special && (
+            <TextField
+              multiLine
+              style={styles.textfieldStyle}
+              hintText="Extended Description"
+              floatingLabelText="Extended Description"
+              value={extendedDescription}
+              onChange={this.handleExtendedDescriptionChange}
+            />
+          )}
         </div>
       </Dialog>
     );

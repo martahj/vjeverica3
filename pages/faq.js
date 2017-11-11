@@ -3,7 +3,7 @@ import Layout from '../containers/Layout';
 
 const Faq = () => (
   <Layout>
-    <div>i am Faq.. what should go here?</div>
+    <div>i am Faq.. policies go here</div>
   </Layout>
 );
 
